@@ -18,13 +18,13 @@ CREATE FUNCTION public.users() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     BEGIN
-	UPDATE users SET createdat = NOW() WHERE id= NEW.id;
+	NEW.createdat = NOW();
 	RETURN coalesce(NEW , OLD );
 END;
 $$;
 
 
-CREATE TRIGGER dateTrigger AFTER INSERT ON public.users FOR EACH ROW EXECUTE FUNCTION public.users();
+CREATE TRIGGER dateTrigger BEFORE INSERT ON public.users FOR EACH ROW EXECUTE FUNCTION public.users();
 
 
 /*****crée un trigger pour age pour dire que c'est que pour les 18 ans sinon suprime si il a 17 ans *****/
